@@ -1,8 +1,10 @@
-public static class ArraysTester {
+public static class ArraysTester
+{
     /// <summary>
     /// Entry point for the tests
     /// </summary>
-    public static void Run() {
+    public static void Run()
+    {
         // Sample Test Cases (may not be comprehensive)
         Console.WriteLine("\n=========== PROBLEM 1 TESTS ===========");
         double[] multiples = MultiplesOf(7, 5);
@@ -39,9 +41,21 @@ public static class ArraysTester {
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
-        return new double[0]; // replace this return statement with your own
+        // Initialize a double array of length {length} to store the multiples
+        // and a variable {d} which will be the multiple to add to the array
+        double[] arr = new double[length];
+        double d = number;
+        
+        // Use a for cycle to find the next {length} numbers that are multiples of {number}
+        // it is done by incrementing {d} by {number} for {length} times, each number is a multiple
+        for (int num = 0; num < length; num++, d+=number)
+        {
+            arr[num] = d;
+        }
+
+        return arr; // replace this return statement with your own
     }
-    
+
     /// <summary>
     /// Rotate the 'data' to the right by the 'amount'.  For example, if the data is 
     /// <c>&lt;List&gt;{1, 2, 3, 4, 5, 6, 7, 8, 9}</c> and an amount is 3 then the list returned should be 
@@ -56,6 +70,17 @@ public static class ArraysTester {
         // Remember: Using comments in your program, write down your process for solving this problem
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
+        
+        // Declare a temporary variable to store a {data} element 
+        // a {i} to cycle through {data} starting from index {data.Count - amount}, which represents the first number of the rotated list
+        // and a {idx} which represents the new position of the element in the list
+        for(int i = data.Count - amount, idx = 0, temp; i < data.Count; i++)
+        {
+            // After saving the element in a temporary variable I remove it from the List and then insert it at its new position determined by {idx}
+            temp = data[i];
+            data.RemoveAt(i);
+            data.Insert(idx++, temp);
+        }
 
     }
 }
