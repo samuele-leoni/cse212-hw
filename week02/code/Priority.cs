@@ -43,7 +43,7 @@
 
         priorityQueue.Dequeue();
 
-        // Defect(s) Found: 
+        // Defect(s) Found: None
 
         Console.WriteLine("---------");
 
