@@ -1,7 +1,10 @@
+using System.Runtime.Versioning;
 using System.Text.Json;
 
-public static class SetsAndMapsTester {
-    public static void Run() {
+public static class SetsAndMapsTester
+{
+    public static void Run()
+    {
         // Problem 1: Find Pairs with Sets
         Console.WriteLine("\n=========== Finding Pairs TESTS ===========");
         DisplayPairs(new[] { "am", "at", "ma", "if", "fi" });
@@ -107,10 +110,35 @@ public static class SetsAndMapsTester {
     /// that there were no duplicates) and therefore should not be displayed.
     /// </summary>
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
-    private static void DisplayPairs(string[] words) {
+    private static void DisplayPairs(string[] words)
+    {
         // To display the pair correctly use something like:
         // Console.WriteLine($"{word} & {pair}");
         // Each pair of words should displayed on its own line.
+
+        // First of all I convert words into a set
+        var set = words.ToHashSet();
+
+        // Then I cycle through the words array and check for each if its reverse is in the set
+        // if it is I will remove it from the set
+        foreach (string str in words)
+        {
+            // I initialize a variable named rev, which holds the reversed version of str
+            // inside the foreach
+            string rev = $"{str[1]}{str[0]}";
+
+            // I check if the set actually contains the reversed version of the current string
+            // and that rev is different from str to avoid cases with two identical letters
+            if (set.Contains(rev) && rev != str)
+            {
+                // If it does, I remove str from the set and print the result
+                // by doing this I assure to print the couples only once
+                set.Remove(str);
+                Console.WriteLine($"{rev} & {str}");
+            }
+        }
+
+
     }
 
     /// <summary>
@@ -127,11 +155,22 @@ public static class SetsAndMapsTester {
     /// #############
     /// # Problem 2 #
     /// #############
-    private static Dictionary<string, int> SummarizeDegrees(string filename) {
+    private static Dictionary<string, int> SummarizeDegrees(string filename)
+    {
         var degrees = new Dictionary<string, int>();
-        foreach (var line in File.ReadLines(filename)) {
+        foreach (var line in File.ReadLines(filename))
+        {
             var fields = line.Split(",");
             // Todo Problem 2 - ADD YOUR CODE HERE
+
+            var degree = fields[3];
+
+            // I try to add the degree checking if degrees contains it, if it's already present 
+            // I just increment its value, otherwise the degree will be added with an initial value of 1
+            if (!degrees.TryAdd(degree, 1))
+            {
+                degrees[degree]++;
+            }
         }
 
         return degrees;
@@ -156,15 +195,57 @@ public static class SetsAndMapsTester {
     /// #############
     /// # Problem 3 #
     /// #############
-    private static bool IsAnagram(string word1, string word2) {
+    private static bool IsAnagram(string word1, string word2)
+    {
         // Todo Problem 3 - ADD YOUR CODE HERE
-        return false;
+
+        // First of all I declare str1 and str2 and assign them respectively word1 and word2 without
+        // whitespaces
+        string str1 = word1.Replace(" ", ""), str2 = word2.Replace(" ", "");
+
+        // Case 1: If the strings have not the same length return false
+        if (str1.Length != str2.Length)
+        {
+            return false;
+        }
+
+        // I declare two dictionaries I will use to compare the characters occurence in the strings
+        Dictionary<char, int> dict = [], dict2 = [];
+
+        // I loop through the two strings with one for loop since they have the same length
+        // to add each char inside the dictionary as a key
+        for (var i = 0; i < str1.Length; i++)
+        {
+            // I declare two variables named c1 and c2 to which I respectively assign the 
+            // current char of str1 and str2
+            char c1 = char.ToUpper(str1[i]), c2 = char.ToUpper(str2[i]);
+
+            // Using the TryAdd method, if the Key is not in the dictionary it returns true because
+            // it successfully adds the pair in it, otherwise it returns false, which means that
+            // the Key is already present
+            if (!dict.TryAdd(c1, 1))
+            {
+                // If the Key is already in the dictionary, simply increment its associated value
+                dict[c1]++;
+            }
+
+            // The same goes for c2 and dict2
+            if (!dict2.TryAdd(c2, 1))
+            {
+                dict2[c2]++;
+            }
+        }
+
+        // Case 2: Then I return the evaluation of the equalty of the two dictionaries. If both dictionaries
+        // have the same value associated with the same Key, it returns true, else it returns false
+        return dict.All(item => dict2.ContainsKey(item.Key) && dict2[item.Key] == item.Value);
     }
 
     /// <summary>
     /// Sets up the maze dictionary for problem 4
     /// </summary>
-    private static Dictionary<ValueTuple<int, int>, bool[]> SetupMazeMap() {
+    private static Dictionary<ValueTuple<int, int>, bool[]> SetupMazeMap()
+    {
         Dictionary<ValueTuple<int, int>, bool[]> map = new() {
             { (1, 1), new[] { false, true, false, true } },
             { (1, 2), new[] { false, true, true, false } },
@@ -220,7 +301,8 @@ public static class SetsAndMapsTester {
     /// https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php
     /// 
     /// </summary>
-    private static void EarthquakeDailySummary() {
+    private static void EarthquakeDailySummary()
+    {
         const string uri = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
         using var client = new HttpClient();
         using var getRequestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
@@ -235,5 +317,17 @@ public static class SetsAndMapsTester {
         // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
         // on those classes so that the call to Deserialize above works properly.
         // 2. Add code below to print out each place a earthquake has happened today and its magitude.
+
+        // I created the needed classes to deserialize the whole data contained in the json response just to show 
+        // that I know how to do it but normally I would create classes to store just the needed properties plus
+        // maybe some that could be needed in the future to waste less memory.
+        // I used the C# naming convention of capitalizing the class members because PropertyNameCaseInsensitive = true
+        // has been set.
+        // Using a foreach the program loops through the Feature objects contained inside the featureCollection.Features
+        // array and prints each earthquake occurrence formatted like the example in the assignment test.
+        foreach(var feature in featureCollection.Features)
+        {
+            Console.WriteLine($"{feature.Properties.Place} - Mag {feature.Properties.Mag}");
+        }
     }
 }

@@ -30,6 +30,10 @@ public class Maze {
     /// </summary>
     public void MoveLeft() {
         // FILL IN CODE
+        // If inside the array containing the value representing the valid direction, left is valid
+        // then I decrement _currX, otherwise I show the message: "Can't go that way!"
+        if(_mazeMap[(_currX, _currY)][0]) _currX--;
+        else Console.WriteLine("Can't go that way!");
     }
 
     /// <summary>
@@ -38,6 +42,10 @@ public class Maze {
     /// </summary>
     public void MoveRight() {
         // FILL IN CODE
+        // If inside the array containing the value representing the valid direction, right is valid
+        // then I increment _currX, otherwise I show the message: "Can't go that way!"
+        if(_mazeMap[(_currX, _currY)][1]) _currX++;
+        else Console.WriteLine("Can't go that way!");
     }
 
     /// <summary>
@@ -46,6 +54,10 @@ public class Maze {
     /// </summary>
     public void MoveUp() {
         // FILL IN CODE
+        // If inside the array containing the value representing the valid direction, up is valid
+        // then I decrement _currY, otherwise I show the message: "Can't go that way!"
+        if(_mazeMap[(_currX, _currY)][2]) _currY--;
+        else Console.WriteLine("Can't go that way!");
     }
 
     /// <summary>
@@ -54,6 +66,10 @@ public class Maze {
     /// </summary>
     public void MoveDown() {
         // FILL IN CODE
+        // If inside the array containing the value representing the valid direction, down is valid
+        // then I increment _currY, otherwise I show the message: "Can't go that way!"
+        if(_mazeMap[(_currX, _currY)][3]) _currY++;
+        else Console.WriteLine("Can't go that way!");
     }
 
     public void ShowStatus() {
