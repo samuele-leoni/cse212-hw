@@ -66,7 +66,10 @@ public class BinarySearchTree : IEnumerable<int> {
 
     private void TraverseBackward(Node? node, List<int> values) {
         // TODO Problem 3
+        // If node is null we reached the end (which in this case is the first node since it's backward)
         if (node is not null) {
+            // This whole block gets the greatest value between the two and adds it to the values List, which
+            // is the list that will contain the value in inverse order
             TraverseBackward(node.Right, values);
             values.Add(node.Data);
             TraverseBackward(node.Left, values);

@@ -103,16 +103,24 @@ public static class TreesTester
     private static void InsertMiddle(int[] sortedNumbers, int first, int last, BinarySearchTree bst)
     {
         // TODO Start Problem 5
+        // Base case, if we reach the point where first is greater than last we return
         if (first > last)
         {
             return;
         }
 
+        // We find the middle value between the current values of first and last
         var middle = (last + first) / 2;
 
+        // We insert the middle value into the Binary search tree
         bst.Insert(sortedNumbers[middle]);
 
+        // We repeat for both left and right side
+        // On the left side we exclude the middle value by decrementing it by 1 when passing it as the last
+        // value for the new recursive call
         InsertMiddle(sortedNumbers, first, middle - 1, bst);
+        // On the right side we exclude the middle value by incrementing it by 1 when passing it as the first
+        // value for the new recursive call
         InsertMiddle(sortedNumbers, middle + 1, last, bst);
     }
 }
